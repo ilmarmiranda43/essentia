@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Relatórios</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="./assets/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Essentia</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="upload.html">Upload</a>
+        <a href="export.html">Exportar/Editar</a>
+        <a href="reports.html" class="active">Relatórios</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <h2>Relatórios</h2>
+      <p>
+        Aqui podemos colocar filtros e chamar o backend pra trazer dados já
+        consolidados.
+      </p>
+
+      <form id="reportForm">
+        <label for="fromDate">Data inicial</label>
+        <input type="date" id="fromDate" name="fromDate" />
+        <label for="toDate">Data final</label>
+        <input type="date" id="toDate" name="toDate" />
+        <button type="submit">Gerar</button>
+      </form>
+
+      <div id="reportResult"></div>
+    </main>
+
+    <script>
+      const API_REPORT = 'https://localhost:7228/api/reports';
+
+      document
+        .getElementById('reportForm')
+        .addEventListener('submit', async (e) => {
+          e.preventDefault();
+          const from = document.getElementById('fromDate').value;
+          const to = document.getElementById('toDate').value;
+
+          const resp = await fetch(`${API_REPORT}?from=${from}&to=${to}`);
+          const data = await resp.json();
+
+          const div = document.getElementById('reportResult');
+          div.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        });
+    </script>
+  </body>
+</html>

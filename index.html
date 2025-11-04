@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Essentia - Home</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="./assets/style.css" />
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Essentia</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="upload.html">Upload</a>
+        <a href="export.html">Exportar/Editar</a>
+        <a href="reports.html">Relatórios</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <h2>Visão geral</h2>
+      <div class="cards">
+        <div class="card">
+          <p>Arquivos na base</p>
+          <h3 id="total-files">--</h3>
+        </div>
+        <div class="card">
+          <p>Contas a pagar</p>
+          <h3 id="total-pagar">--</h3>
+        </div>
+        <div class="card">
+          <p>Contas a receber</p>
+          <h3 id="total-receber">--</h3>
+        </div>
+      </div>
+
+      <section class="panel">
+        <h2>Contas a pagar x receber</h2>
+        <canvas id="cashChart" height="120"></canvas>
+      </section>
+    </main>
+
+    <script>
+      // TROCAR para o endereço do seu backend
+      const API_BASE = 'https://SEU-BACKEND-AQUI';
+
+      async function loadSummary() {
+        try {
+          const resp = await fetch(`${API_BASE}/api/summary`);
+          const data = await resp.json();
+          document.getElementById('total-files').textContent =
+            data.total_files ?? 0;
+          document.getElementById('total-pagar').textContent =
+            data.total_pagar ?? 0;
+          document.getElementById('total-receber').textContent =
+            data.total_receber ?? 0;
+        } catch (e) {
+          console.warn('Não foi possível carregar o resumo', e);
+        }
+      }
+
+      async function loadChart() {
+        try {
+          const resp = await fetch(`${API_BASE}/api/cashflow`);
+          const data = await resp.json();
+          // supondo que venha algo assim:
+          // { labels: ["Jan","Fev"], pagar: [1000,1200], receber: [1500,900] }
+
+          const ctx = document.getElementById('cashChart').getContext('2d');
+          new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: data.labels,
+              datasets: [
+                {
+                  label: 'Pagar',
+                  data: data.pagar,
+                  backgroundColor: 'rgba(239,68,68,0.6)',
+                },
+                {
+                  label: 'Receber',
+                  data: data.receber,
+                  backgroundColor: 'rgba(59,130,246,0.6)',
+                },
+              ],
+            },
+            options: {
+              responsive: true,
+              scales: {
+                y: { beginAtZero: true },
+              },
+            },
+          });
+        } catch (e) {
+          console.warn('Não foi possível carregar o gráfico', e);
+        }
+      }
+
+      loadSummary();
+      loadChart();
+    </script>
+  </body>
+</html>

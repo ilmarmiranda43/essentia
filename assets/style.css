@@ -1,0 +1,79 @@
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background: #f4f5f7;
+}
+.topbar {
+  background: #1f2937;
+  color: #fff;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.topbar nav a {
+  color: #e5e7eb;
+  margin-left: 1rem;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+.topbar nav a.active,
+.topbar nav a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+.container {
+  max-width: 1000px;
+  margin: 1.5rem auto;
+  padding: 0 1rem;
+}
+.cards {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.card {
+  background: #fff;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  flex: 1 1 180px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+.panel {
+  background: #fff;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+.table th,
+.table td {
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+.label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+input[type='file'],
+input[type='date'] {
+  margin-bottom: 0.75rem;
+}
+button {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+button:hover {
+  background: #1d4ed8;
+}

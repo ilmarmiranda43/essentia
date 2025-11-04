@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Upload de arquivos</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="./assets/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <h1>Essentia</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="upload.html" class="active">Upload</a>
+        <a href="export.html">Exportar/Editar</a>
+        <a href="reports.html">Relatórios</a>
+      </nav>
+    </header>
+
+    <main class="container">
+      <h2>Upload para SharePoint</h2>
+      <p>Selecione um arquivo e envie.</p>
+
+      <label for="fileInput" class="label">Arquivo</label>
+      <input type="file" id="fileInput" name="file" />
+
+      <button id="btnUpload">Enviar</button>
+      <p id="status"></p>
+
+      <p><a href="index.html">← Voltar para Home</a></p>
+    </main>
+
+    <script>
+      const API_UPLOAD = 'https://localhost:7228/api/upload';
+
+      const btn = document.getElementById('btnUpload');
+      btn.addEventListener('click', async () => {
+        const fileInput = document.getElementById('fileInput');
+        const status = document.getElementById('status');
+
+        if (!fileInput.files.length) {
+          status.textContent = 'Selecione um arquivo.';
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', fileInput.files[0]);
+
+        btn.disabled = true;
+        status.textContent = 'Enviando...';
+
+        try {
+          const resp = await fetch(API_UPLOAD, {
+            method: 'POST',
+            body: formData,
+          });
+          if (resp.ok) {
+            status.textContent = 'Enviado com sucesso!';
+            fileInput.value = '';
+          } else {
+            status.textContent = 'Erro ao enviar.';
+          }
+        } catch (e) {
+          status.textContent = 'Erro ao conectar ao backend.';
+        } finally {
+          btn.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>
